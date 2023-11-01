@@ -1,6 +1,7 @@
 package com.battlemetrics.controller;
 
 import com.battlemetrics.model.response.Player;
+import com.battlemetrics.model.response.PlayerSession;
 import com.battlemetrics.service.PlayerService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,5 +18,10 @@ public class PlayerController {
     @GetMapping("/{playerId}")
     public Player getPlayerById(@PathVariable String playerId) {
         return playerService.getPlayerById(playerId);
+    }
+
+    @GetMapping("/{playerId}/sessions")
+    public PlayerSession getPlayerSessionsById(@PathVariable String playerId) {
+        return playerService.getPlayerSessionsById(playerId);
     }
 }
