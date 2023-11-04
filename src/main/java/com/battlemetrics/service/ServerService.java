@@ -1,7 +1,7 @@
 package com.battlemetrics.service;
 
 import com.battlemetrics.Constants;
-import com.battlemetrics.model.response.Server;
+import com.battlemetrics.model.response.ServerResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -9,8 +9,8 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @AllArgsConstructor
 public class ServerService {
-    public Server getServerById(String serverId) {
+    public ServerResponse getServerById(String serverId) {
         String apiUrl = Constants.API_URL + "/servers/" + serverId;
-        return new RestTemplate().getForObject(apiUrl, Server.class);
+        return new RestTemplate().getForObject(apiUrl, ServerResponse.class);
     }
 }

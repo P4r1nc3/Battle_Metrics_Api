@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Server {
+public class ServerResponse {
     private ServerData data;
 
     @Data

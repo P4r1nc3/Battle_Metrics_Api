@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlayerSession {
+public class PlayerSessionResponse {
     private List<SessionData> data;
     private Links links;
     private List<Object> included;
