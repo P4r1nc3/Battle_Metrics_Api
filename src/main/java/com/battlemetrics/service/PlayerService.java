@@ -1,7 +1,7 @@
 package com.battlemetrics.service;
 
 import com.battlemetrics.Constants;
-import com.battlemetrics.model.response.Player;
+import com.battlemetrics.model.response.PlayerResponse;
 import com.battlemetrics.model.response.PlayerOnlineStatus;
 import com.battlemetrics.model.response.PlayerSession;
 import lombok.AllArgsConstructor;
@@ -11,9 +11,9 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @AllArgsConstructor
 public class PlayerService {
-    public Player getPlayerById(String playerId) {
+    public PlayerResponse getPlayerById(String playerId) {
         String apiUrl = Constants.API_URL + "/players/" + playerId;
-        return new RestTemplate().getForObject(apiUrl, Player.class);
+        return new RestTemplate().getForObject(apiUrl, PlayerResponse.class);
     }
 
     public PlayerSession getPlayerSessionsById(String playerId) {

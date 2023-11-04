@@ -1,6 +1,6 @@
 package com.battlemetrics.controller;
 
-import com.battlemetrics.model.response.Player;
+import com.battlemetrics.model.response.PlayerResponse;
 import com.battlemetrics.model.response.PlayerOnlineStatus;
 import com.battlemetrics.model.response.PlayerSession;
 import com.battlemetrics.service.PlayerService;
@@ -17,7 +17,7 @@ public class PlayerController {
     private PlayerService playerService;
 
     @GetMapping("/{playerId}")
-    public Player getPlayerById(@PathVariable String playerId) {
+    public PlayerResponse getPlayerById(@PathVariable String playerId) {
         return playerService.getPlayerById(playerId);
     }
 
