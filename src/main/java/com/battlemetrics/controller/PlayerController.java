@@ -1,7 +1,7 @@
 package com.battlemetrics.controller;
 
 import com.battlemetrics.model.response.PlayerResponse;
-import com.battlemetrics.model.response.PlayerOnlineStatus;
+import com.battlemetrics.model.response.PlayerStatusResponse;
 import com.battlemetrics.model.response.PlayerSession;
 import com.battlemetrics.service.PlayerService;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class PlayerController {
     }
 
     @GetMapping("/{playerId}/isOnline")
-    public PlayerOnlineStatus isPlayerOnline(@PathVariable String playerId) {
+    public PlayerStatusResponse isPlayerOnline(@PathVariable String playerId) {
         return playerService.isPlayerOnline(playerId);
     }
 }
