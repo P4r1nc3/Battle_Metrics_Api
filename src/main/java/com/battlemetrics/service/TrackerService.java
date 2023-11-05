@@ -18,11 +18,13 @@ public class TrackerService {
 
     public void addPlayerToTracking(String playerId) {
         PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
-        PlayerStatusResponse status = playerService.isPlayerOnline(playerSession);
+        boolean status = playerService.isPlayerOnline(playerSession).isOnline();
+        String nick = playerService.getPlayerNick(playerSession);
 
         TrackedPlayer trackedPlayer = new TrackedPlayer();
         trackedPlayer.setPlayerId(playerId);
-        trackedPlayer.setOnline(status.isOnline());
+        trackedPlayer.setNick(nick);
+        trackedPlayer.setOnline(status);
 
         trackedPlayerRepository.save(trackedPlayer);
     }

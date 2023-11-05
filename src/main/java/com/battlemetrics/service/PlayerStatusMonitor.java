@@ -31,7 +31,9 @@ public class PlayerStatusMonitor {
             boolean lastStatus = trackedPlayer.isOnline();
 
             if (currentStatus != lastStatus) {
-                mailService.sendNotification(currentStatus);
+                if(trackedPlayer.isNotifications() == true){
+                    mailService.sendNotification(currentStatus);
+                }
                 trackedPlayer.setOnline(currentStatus);
                 trackerRepository.save(trackedPlayer);
             }

@@ -29,4 +29,12 @@ public class PlayerService {
         }
         return new PlayerStatusResponse(false);
     }
+
+    public String getPlayerNick(PlayerSessionResponse playerSession) {
+        if (playerSession != null && playerSession.getData() != null && !playerSession.getData().isEmpty()) {
+            PlayerSessionResponse.SessionData latestSession = playerSession.getData().get(0);
+            return latestSession.getAttributes().getName();
+        }
+        return null;
+    }
 }
