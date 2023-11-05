@@ -1,12 +1,13 @@
 package com.battlemetrics.service;
 
-import com.battlemetrics.model.response.PlayerStatusResponse;
+import com.battlemetrics.model.dao.TrackedPlayer;
+import com.battlemetrics.repository.TrackedPlayerRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -14,23 +15,24 @@ import java.util.Map;
 public class PlayerStatusMonitor {
     private final PlayerService playerService;
     private final TrackerService trackerService;
+    private final TrackedPlayerRepository trackerRepository;
     private final MailService mailService;
 
-    @Scheduled(fixedDelay = 2000)
+    @Scheduled(fixedDelay = 10000)
     public void checkTrackedPlayersOnlineStatus() {
-        Map<String, PlayerStatusResponse> trackedPlayers = trackerService.getTrackedPlayers();
+        List<TrackedPlayer> trackedPlayers = trackerService.getTrackedPlayers();
 
-        for (Map.Entry<String, PlayerStatusResponse> entry : trackedPlayers.entrySet()) {
-            String playerId = entry.getKey();
+        for (TrackedPlayer trackedPlayer : trackedPlayers) {
+            String playerId = trackedPlayer.getPlayerId();
 
-            PlayerStatusResponse currentStatus = playerService.isPlayerOnline(playerId);
-            PlayerStatusResponse lastStatus = trackerService.getLastStatus(playerId);
+            boolean currentStatus = playerService.isPlayerOnline(playerId).isOnline();
+            boolean lastStatus = trackedPlayer.isOnline();
 
-            if (currentStatus.isOnline() != lastStatus.isOnline()) {
+            if (currentStatus != lastStatus) {
                 mailService.sendNotification(currentStatus);
+                trackedPlayer.setOnline(currentStatus);
+                trackerRepository.save(trackedPlayer);
             }
-
-            trackerService.setLastStatus(playerId, currentStatus);
         }
     }
 }
