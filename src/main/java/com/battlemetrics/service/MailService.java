@@ -18,13 +18,13 @@ public class MailService {
     private final JavaMailSender mailSender;
 
     @Async
-    public void sendNotification(PlayerStatusResponse status) {
+    public void sendNotification(boolean status) {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom("springBattleMetricsApi@email.com");
             messageHelper.setTo("konrad.tupta@gmail.com");
             messageHelper.setSubject("Status has changed");
-            messageHelper.setText("The player is now " + (status.isOnline() ? "online" : "offline"));
+            messageHelper.setText("The player is now " + (status ? "online" : "offline"));
         };
         try {
             mailSender.send(messagePreparator);
