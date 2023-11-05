@@ -1,6 +1,7 @@
 package com.battlemetrics.service;
 
 import com.battlemetrics.model.dao.TrackedPlayer;
+import com.battlemetrics.model.response.PlayerSessionResponse;
 import com.battlemetrics.repository.TrackedPlayerRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,9 @@ public class PlayerStatusMonitor {
 
         for (TrackedPlayer trackedPlayer : trackedPlayers) {
             String playerId = trackedPlayer.getPlayerId();
+            PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
 
-            boolean currentStatus = playerService.isPlayerOnline(playerId).isOnline();
+            boolean currentStatus = playerService.isPlayerOnline(playerSession).isOnline();
             boolean lastStatus = trackedPlayer.isOnline();
 
             if (currentStatus != lastStatus) {

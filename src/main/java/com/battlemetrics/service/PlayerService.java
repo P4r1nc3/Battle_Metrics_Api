@@ -21,9 +21,7 @@ public class PlayerService {
         return new RestTemplate().getForObject(apiUrl, PlayerSessionResponse.class);
     }
 
-    public PlayerStatusResponse isPlayerOnline(String playerId) {
-        PlayerSessionResponse playerSession = getPlayerSessionsById(playerId);
-
+    public PlayerStatusResponse isPlayerOnline(PlayerSessionResponse playerSession) {
         if (playerSession != null && playerSession.getData() != null && !playerSession.getData().isEmpty()) {
             PlayerSessionResponse.SessionData latestSession = playerSession.getData().get(0);
             boolean isOnline = latestSession.getAttributes().getStop() == null;
