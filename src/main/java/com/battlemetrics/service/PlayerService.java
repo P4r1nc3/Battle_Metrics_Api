@@ -21,14 +21,22 @@ public class PlayerService {
         return new RestTemplate().getForObject(apiUrl, PlayerSessionResponse.class);
     }
 
-    public PlayerStatusResponse isPlayerOnline(String playerId) {
-        PlayerSessionResponse playerSession = getPlayerSessionsById(playerId);
+    //TODO decide what to do with below methods
 
+    public PlayerStatusResponse isPlayerOnline(PlayerSessionResponse playerSession) {
         if (playerSession != null && playerSession.getData() != null && !playerSession.getData().isEmpty()) {
             PlayerSessionResponse.SessionData latestSession = playerSession.getData().get(0);
             boolean isOnline = latestSession.getAttributes().getStop() == null;
             return new PlayerStatusResponse(isOnline);
         }
         return new PlayerStatusResponse(false);
+    }
+
+    public String getPlayerNick(PlayerSessionResponse playerSession) {
+        if (playerSession != null && playerSession.getData() != null && !playerSession.getData().isEmpty()) {
+            PlayerSessionResponse.SessionData latestSession = playerSession.getData().get(0);
+            return latestSession.getAttributes().getName();
+        }
+        return null;
     }
 }

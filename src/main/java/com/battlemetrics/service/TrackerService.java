@@ -1,6 +1,7 @@
 package com.battlemetrics.service;
 
 import com.battlemetrics.model.dao.TrackedPlayer;
+import com.battlemetrics.model.response.PlayerSessionResponse;
 import com.battlemetrics.model.response.PlayerStatusResponse;
 import com.battlemetrics.repository.TrackedPlayerRepository;
 import lombok.AllArgsConstructor;
@@ -16,11 +17,14 @@ public class TrackerService {
     private final TrackedPlayerRepository trackedPlayerRepository;
 
     public void addPlayerToTracking(String playerId) {
-        PlayerStatusResponse status = playerService.isPlayerOnline(playerId);
+        PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
+        boolean status = playerService.isPlayerOnline(playerSession).isOnline();
+        String nick = playerService.getPlayerNick(playerSession);
 
         TrackedPlayer trackedPlayer = new TrackedPlayer();
         trackedPlayer.setPlayerId(playerId);
-        trackedPlayer.setOnline(status.isOnline());
+        trackedPlayer.setNick(nick);
+        trackedPlayer.setOnline(status);
 
         trackedPlayerRepository.save(trackedPlayer);
     }

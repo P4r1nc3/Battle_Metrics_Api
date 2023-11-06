@@ -28,6 +28,7 @@ public class PlayerController {
 
     @GetMapping("/{playerId}/isOnline")
     public PlayerStatusResponse isPlayerOnline(@PathVariable String playerId) {
-        return playerService.isPlayerOnline(playerId);
+        PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
+        return playerService.isPlayerOnline(playerSession);
     }
 }

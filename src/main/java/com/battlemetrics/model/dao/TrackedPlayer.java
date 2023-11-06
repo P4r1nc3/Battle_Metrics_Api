@@ -11,6 +11,7 @@ import lombok.Data;
 public class TrackedPlayer {
     @Id
     private String playerId;
+    private String nick;
     private boolean online;
-    // TODO new fields here, like since when player is being tracked etc.
+    private boolean notifications = true;
 }
