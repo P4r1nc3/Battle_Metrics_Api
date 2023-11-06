@@ -21,6 +21,8 @@ public class PlayerService {
         return new RestTemplate().getForObject(apiUrl, PlayerSessionResponse.class);
     }
 
+    //TODO decide what to do with below methods
+
     public PlayerStatusResponse isPlayerOnline(PlayerSessionResponse playerSession) {
         if (playerSession != null && playerSession.getData() != null && !playerSession.getData().isEmpty()) {
             PlayerSessionResponse.SessionData latestSession = playerSession.getData().get(0);
