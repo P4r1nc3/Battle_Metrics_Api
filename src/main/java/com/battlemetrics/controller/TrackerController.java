@@ -1,6 +1,6 @@
 package com.battlemetrics.controller;
 
-import com.battlemetrics.model.dao.TrackedPlayer;
+import com.battlemetrics.model.TrackedPlayer;
 import com.battlemetrics.service.TrackerService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.battlemetrics.model.response;
+package com.battlemetrics.dao.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

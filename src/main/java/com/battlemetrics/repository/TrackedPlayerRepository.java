@@ -1,6 +1,6 @@
 package com.battlemetrics.repository;
 
-import com.battlemetrics.model.dao.TrackedPlayer;
+import com.battlemetrics.model.TrackedPlayer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

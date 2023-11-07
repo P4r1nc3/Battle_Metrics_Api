@@ -1,8 +1,7 @@
 package com.battlemetrics.service;
 
-import com.battlemetrics.model.dao.TrackedPlayer;
-import com.battlemetrics.model.response.PlayerSessionResponse;
-import com.battlemetrics.model.response.PlayerStatusResponse;
+import com.battlemetrics.model.TrackedPlayer;
+import com.battlemetrics.dao.response.PlayerSessionResponse;
 import com.battlemetrics.repository.TrackedPlayerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
