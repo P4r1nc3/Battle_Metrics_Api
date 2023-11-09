@@ -34,8 +34,9 @@ public class TrackerController {
     }
 
     @DeleteMapping("/{playerId}")
-    public ResponseEntity<String> removePlayerFromTracking(@PathVariable String playerId) {
-        trackerService.removePlayerFromTracking(playerId);
+    public ResponseEntity<String> removePlayerFromTracking(@PathVariable String playerId, Authentication authentication) {
+        User currentUser = (User) authentication.getPrincipal();
+        trackerService.removePlayerFromTracking(playerId, currentUser);
         return ResponseEntity.ok("Player removed from tracking list.");
     }
 
