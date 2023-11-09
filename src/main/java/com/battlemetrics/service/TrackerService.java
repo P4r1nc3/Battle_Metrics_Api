@@ -2,6 +2,7 @@ package com.battlemetrics.service;
 
 import com.battlemetrics.model.TrackedPlayer;
 import com.battlemetrics.dao.response.PlayerSessionResponse;
+import com.battlemetrics.model.User;
 import com.battlemetrics.repository.TrackedPlayerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,8 @@ public class TrackerService {
         trackedPlayerRepository.deleteById(playerId);
     }
 
-    public List<TrackedPlayer> getTrackedPlayers() {
-        return  trackedPlayerRepository.findAll();
+    public List<TrackedPlayer> getTrackedPlayers(User user) {
+        return trackedPlayerRepository.findByUser(user);
     }
 
     public Optional<TrackedPlayer> getTrackedPlayer(String playerId) {
