@@ -5,6 +5,7 @@ import com.battlemetrics.dao.response.PlayerSessionResponse;
 import com.battlemetrics.model.User;
 import com.battlemetrics.repository.TrackedPlayerRepository;
 import com.battlemetrics.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,6 +24,7 @@ public class PlayerStatusMonitor {
     private final MailService mailService;
     private final UserRepository userRepository;
 
+    @Transactional
     @Scheduled(fixedDelay = 10000)
     public void checkTrackedPlayersOnlineStatus() {
         Optional<User> userOptional = userRepository.findByEmail("draber21@gmail.com");
