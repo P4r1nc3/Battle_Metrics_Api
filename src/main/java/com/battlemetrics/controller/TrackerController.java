@@ -40,8 +40,9 @@ public class TrackerController {
     }
 
     @GetMapping("/trackedPlayers")
-    public ResponseEntity<List<TrackedPlayer>> getTrackedPlayers() {
-        List<TrackedPlayer> trackedPlayers = trackerService.getTrackedPlayers();
+    public ResponseEntity<List<TrackedPlayer>> getTrackedPlayersForCurrentUser(Authentication authentication) {
+        User currentUser = (User) authentication.getPrincipal();
+        List<TrackedPlayer> trackedPlayers = trackerService.getTrackedPlayers(currentUser);
         return ResponseEntity.ok(trackedPlayers);
     }
 }
