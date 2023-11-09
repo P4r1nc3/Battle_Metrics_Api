@@ -4,6 +4,7 @@ import com.battlemetrics.model.TrackedPlayer;
 import com.battlemetrics.dao.response.PlayerSessionResponse;
 import com.battlemetrics.model.User;
 import com.battlemetrics.repository.TrackedPlayerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,13 @@ public class TrackerService {
         trackedPlayerRepository.save(trackedPlayer);
     }
 
-    public void removePlayerFromTracking(String playerId) {
-        trackedPlayerRepository.deleteById(playerId);
+    public void removePlayerFromTracking(String playerId, User user) {
+        TrackedPlayer trackedPlayer = trackedPlayerRepository.findByUserAndPlayerId(user, playerId);
+        if (trackedPlayer != null) {
+            trackedPlayerRepository.delete(trackedPlayer);
+        } else {
+            throw new EntityNotFoundException("Tracked player not found with id: " + playerId);
+        }
     }
 
     public List<TrackedPlayer> getTrackedPlayers(User user) {
