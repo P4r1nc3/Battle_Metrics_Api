@@ -1,10 +1,13 @@
 package com.battlemetrics.controller;
 
 import com.battlemetrics.model.TrackedPlayer;
+import com.battlemetrics.model.User;
 import com.battlemetrics.service.TrackerService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +20,9 @@ public class TrackerController {
 
     @PostMapping("/{playerId}")
     public ResponseEntity<String> addPlayerToTracking(@PathVariable String playerId) {
-        trackerService.addPlayerToTracking(playerId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        trackerService.addPlayerToTracking(playerId, user);
         return ResponseEntity.ok("Player added to tracking list.");
     }
 
