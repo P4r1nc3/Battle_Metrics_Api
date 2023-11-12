@@ -18,11 +18,10 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class PlayerStatusMonitor {
-    private final PlayerService playerService;
-    private final TrackerService trackerService;
-    private final TrackedPlayerRepository trackerRepository;
     private final MailService mailService;
+    private final PlayerService playerService;
     private final UserRepository userRepository;
+    private final TrackedPlayerRepository trackerRepository;
 
     @Transactional
     @Scheduled(fixedDelay = 10000)
@@ -30,7 +29,7 @@ public class PlayerStatusMonitor {
         Optional<User> userOptional = userRepository.findByEmail("draber21@gmail.com");
 
         userOptional.ifPresent(user -> {
-            List<TrackedPlayer> trackedPlayers = user.getTrackedPlayers();
+            List<TrackedPlayer> trackedPlayers = user.getTrackedPlayers().stream().toList();
 
             for (TrackedPlayer trackedPlayer : trackedPlayers) {
                 String playerId = trackedPlayer.getPlayerId();
