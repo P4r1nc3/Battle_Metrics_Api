@@ -1,29 +1,30 @@
 package com.battlemetrics.model;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
+@Setter
+@Getter
+@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer userId;
     private String firstName;
     private String lastName;
     @Column(unique = true)
@@ -32,8 +33,19 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<TrackedPlayer> trackedPlayers;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.ALL
+    })
+    @JoinTable(
+            name = "users_tracked_players",
+            joinColumns = {
+                    @JoinColumn(name = "user_id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "player_id")
+            }
+    )
+    private Set<TrackedPlayer> trackedPlayers = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

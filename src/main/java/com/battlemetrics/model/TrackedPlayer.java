@@ -2,26 +2,27 @@ package com.battlemetrics.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+import java.util.HashSet;
+import java.util.Set;
+
+@Setter
+@Getter
+@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "tracked_player")
+@Table(name = "tracked_players")
 public class TrackedPlayer {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String playerId;
     private String nick;
     private boolean online;
     private boolean notifications = true;
-
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "trackedPlayers", cascade = { CascadeType.ALL })
+    private Set<User> users = new HashSet<>();
 }
