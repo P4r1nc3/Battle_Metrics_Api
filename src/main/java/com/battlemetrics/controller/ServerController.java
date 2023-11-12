@@ -1,6 +1,6 @@
 package com.battlemetrics.controller;
 
-import com.battlemetrics.model.response.ServerResponse;
+import com.battlemetrics.dao.response.ServerResponse;
 import com.battlemetrics.service.ServerService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,7 @@
 package com.battlemetrics.service;
 
 import com.battlemetrics.exceptions.EmailSendingException;
-import com.battlemetrics.model.response.PlayerSessionResponse;
+import com.battlemetrics.dao.response.PlayerSessionResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;

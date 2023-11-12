@@ -1,8 +1,8 @@
 package com.battlemetrics.controller;
 
-import com.battlemetrics.model.response.PlayerResponse;
-import com.battlemetrics.model.response.PlayerStatusResponse;
-import com.battlemetrics.model.response.PlayerSessionResponse;
+import com.battlemetrics.dao.response.PlayerResponse;
+import com.battlemetrics.dao.response.PlayerStatusResponse;
+import com.battlemetrics.dao.response.PlayerSessionResponse;
 import com.battlemetrics.service.PlayerService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

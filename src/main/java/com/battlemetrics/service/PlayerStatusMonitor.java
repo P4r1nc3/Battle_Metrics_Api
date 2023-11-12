@@ -1,43 +1,51 @@
 package com.battlemetrics.service;
 
-import com.battlemetrics.model.dao.TrackedPlayer;
-import com.battlemetrics.model.response.PlayerSessionResponse;
+import com.battlemetrics.model.TrackedPlayer;
+import com.battlemetrics.dao.response.PlayerSessionResponse;
+import com.battlemetrics.model.User;
 import com.battlemetrics.repository.TrackedPlayerRepository;
+import com.battlemetrics.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @AllArgsConstructor
 public class PlayerStatusMonitor {
-    private final PlayerService playerService;
-    private final TrackerService trackerService;
-    private final TrackedPlayerRepository trackerRepository;
     private final MailService mailService;
+    private final PlayerService playerService;
+    private final UserRepository userRepository;
+    private final TrackedPlayerRepository trackerRepository;
 
+    @Transactional
     @Scheduled(fixedDelay = 10000)
     public void checkTrackedPlayersOnlineStatus() {
-        List<TrackedPlayer> trackedPlayers = trackerService.getTrackedPlayers();
+        Optional<User> userOptional = userRepository.findByEmail("draber21@gmail.com");
 
-        for (TrackedPlayer trackedPlayer : trackedPlayers) {
-            String playerId = trackedPlayer.getPlayerId();
-            PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
+        userOptional.ifPresent(user -> {
+            List<TrackedPlayer> trackedPlayers = user.getTrackedPlayers().stream().toList();
 
-            boolean currentStatus = playerService.isPlayerOnline(playerSession).isOnline();
-            boolean lastStatus = trackedPlayer.isOnline();
+            for (TrackedPlayer trackedPlayer : trackedPlayers) {
+                String playerId = trackedPlayer.getPlayerId();
+                PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
 
-            if (currentStatus != lastStatus) {
-                if(trackedPlayer.isNotifications()){
-                    mailService.sendNotification(playerSession);
+                boolean currentStatus = playerService.isPlayerOnline(playerSession).isOnline();
+                boolean lastStatus = trackedPlayer.isOnline();
+
+                if (currentStatus != lastStatus) {
+                    if(trackedPlayer.isNotifications()){
+                        mailService.sendNotification(playerSession);
+                    }
+                    trackedPlayer.setOnline(currentStatus);
+                    trackerRepository.save(trackedPlayer);
                 }
-                trackedPlayer.setOnline(currentStatus);
-                trackerRepository.save(trackedPlayer);
             }
-        }
+        });
     }
 }
-
