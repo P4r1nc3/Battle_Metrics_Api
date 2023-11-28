@@ -9,8 +9,13 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @AllArgsConstructor
 public class ServerService {
-    public ServerResponse getServerById(String serverId) {
+    public ServerResponse getServerById(String serverId, String include) {
         String apiUrl = Constants.API_URL + "/servers/" + serverId;
+
+        if (include != null && !include.isEmpty()) {
+            apiUrl += "?include=" + include;
+        }
+
         return new RestTemplate().getForObject(apiUrl, ServerResponse.class);
     }
 }

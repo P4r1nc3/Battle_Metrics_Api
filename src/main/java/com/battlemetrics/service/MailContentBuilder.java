@@ -19,7 +19,7 @@ public class MailContentBuilder {
         String serverId = playerSession.getData().get(0).getRelationships().getServer().getData().getId();
         Instant startTime = playerSession.getData().get(0).getAttributes().getStart();
 
-        ServerResponse serverResponse = serverService.getServerById(serverId);
+        ServerResponse serverResponse = serverService.getServerById(serverId, null);
 
         String serverName = serverResponse.getData().getAttributes().getName();
         String ipAddress = serverResponse.getData().getAttributes().getIp();
