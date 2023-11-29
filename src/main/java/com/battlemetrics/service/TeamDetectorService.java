@@ -51,7 +51,7 @@ public class TeamDetectorService {
 
         for (Element friendBlock : friendBlocks) {
             String friendName = extractFriendName(friendBlock);
-            String friendSteamId = extractSteamId(friendBlock);
+            String friendSteamId = extractFriendSteamId(friendBlock);
             String friendLink = extractFriendLink(friendBlock);
 
             Friend friend = new Friend(friendName, friendSteamId, friendLink);
@@ -61,7 +61,7 @@ public class TeamDetectorService {
         return friends;
     }
 
-    private static String extractSteamId(Element friendBlock) {
+    private static String extractFriendSteamId(Element friendBlock) {
         return friendBlock.attr("data-steamid");
     }
 
