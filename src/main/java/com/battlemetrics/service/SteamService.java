@@ -1,7 +1,7 @@
 package com.battlemetrics.service;
 
 import com.battlemetrics.Constants;
-import com.battlemetrics.dao.response.SteamResponse;
+import com.battlemetrics.dao.response.steamapi.SteamResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

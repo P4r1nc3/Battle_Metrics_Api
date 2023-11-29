@@ -1,4 +1,4 @@
-package com.battlemetrics.dao.response;
+package com.battlemetrics.dao.response.bmapi;
 
 import lombok.Data;
 

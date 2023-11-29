@@ -1,7 +1,7 @@
 package com.battlemetrics.service;
 
 import com.battlemetrics.Constants;
-import com.battlemetrics.dao.response.ServerResponse;
+import com.battlemetrics.dao.response.bmapi.ServerResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
