@@ -11,40 +11,37 @@ public class IncludedPlayer {
     private PlayerAttributes attributes;
     private PlayerRelationships relationships;
     private PlayerMeta meta;
-}
 
-@Data
-class PlayerAttributes {
-    private String id;
-    private String name;
-    private boolean isPrivate;
-    private boolean positiveMatch;
-    private String createdAt;
-    private String updatedAt;
-    // Add other attributes as needed
-}
+    @Data
+    public static class PlayerAttributes {
+        private String id;
+        private String name;
+        private boolean isPrivate;
+        private boolean positiveMatch;
+        private String createdAt;
+        private String updatedAt;
+    }
 
-@Data
-class PlayerRelationships {
-    private ServerData data;
-    // Add other relationships as needed
-}
+    @Data
+    public static class PlayerRelationships {
+        private ServerData data;
+    }
 
-@Data
-class PlayerMeta {
-    private List<Metadata> metadata;
-}
+    @Data
+    public static class PlayerMeta {
+        private List<Metadata> metadata;
+    }
 
-@Data
-class Metadata {
-    private String key;
-    private boolean value;
-    private boolean isPrivate;
-}
+    @Data
+    public static class Metadata {
+        private String key;
+        private boolean value;
+        private boolean isPrivate;
+    }
 
-@Data
-class ServerData {
-    private String type;
-    private String id;
+    @Data
+    public static class ServerData {
+        private String type;
+        private String id;
+    }
 }
-
