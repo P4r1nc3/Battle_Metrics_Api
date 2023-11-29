@@ -33,6 +33,7 @@ public class TeamDetectorService {
             String content = request(url);
 
             if (content != null) {
+                System.out.println(parseFriends(content));
                 return parseFriends(content);
             } else {
                 throw new RuntimeException("Could not request friend list page");
@@ -49,11 +50,11 @@ public class TeamDetectorService {
         Elements friendBlocks = doc.select(".friend_block_v2[data-steamid]");
 
         for (Element friendBlock : friendBlocks) {
-            String steamId = extractSteamId(friendBlock);
             String friendName = extractFriendName(friendBlock);
+            String friendSteamId = extractSteamId(friendBlock);
             String friendLink = extractFriendLink(friendBlock);
 
-            Friend friend = new Friend(steamId, friendName, friendLink);
+            Friend friend = new Friend(friendName, friendSteamId, friendLink);
             friends.add(friend);
         }
 

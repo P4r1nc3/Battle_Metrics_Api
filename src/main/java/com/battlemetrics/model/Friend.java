@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Friend {
-    private String friendName;
-    private String friendLink;
+    private String nick;
     private String steamId;
+    private String profileUrl;
 }
 
