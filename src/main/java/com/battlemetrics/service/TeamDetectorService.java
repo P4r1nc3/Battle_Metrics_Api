@@ -1,6 +1,9 @@
 package com.battlemetrics.service;
 
+import com.battlemetrics.dao.response.bmapi.IncludedPlayer;
+import com.battlemetrics.dao.response.bmapi.ServerResponse;
 import com.battlemetrics.model.Friend;
+import com.battlemetrics.model.Player;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,14 +20,29 @@ import org.jsoup.select.Elements;
 @Service
 @AllArgsConstructor
 public class TeamDetectorService {
+    private final ServerService serverService;
 
     // TODO implementation of below methods
     public String detectTeams(String battlemetricsUrl, String steamUrl) {
         return null;
     }
 
-    private List<String> getPlayersList(String battlemetricsUrl) {
-        return null;
+
+    public List<Player> getPlayersList(String serverId) {
+        ServerResponse serverResponse = serverService.getServerById(serverId, "player");
+
+        List<Player> playersList = new ArrayList<>();
+
+        for (IncludedPlayer includedPlayer : serverResponse.getIncluded()) {
+            String nick = includedPlayer.getAttributes().getName();
+            String id = includedPlayer.getAttributes().getId();
+            String url = "https://www.battlemetrics.com/players/" + id;
+
+            Player player = new Player(nick, id, url);
+            playersList.add(player);
+        }
+
+        return playersList;
     }
 
     public List<Friend> getFriendsList(String steamUrl) {
