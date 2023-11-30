@@ -2,9 +2,11 @@ package com.battlemetrics.controller;
 
 import com.battlemetrics.dao.request.SteamRequest;
 import com.battlemetrics.model.Friend;
+import com.battlemetrics.model.Player;
 import com.battlemetrics.service.SteamService;
 import com.battlemetrics.service.TeamDetectorService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,14 +24,14 @@ public class SteamController {
         return steamService.getSteamId(steamUrl);
     }
 
-    @GetMapping("/teamDetector")
-    public String teamDetector(@RequestParam String battlemetricsUrl, @RequestParam String steamUrl) {
-        return teamDetectorService.detectTeams(battlemetricsUrl, steamUrl);
-    }
-
-    @PostMapping("/friendsList")
+    @PostMapping("/friends")
     public List<Friend> getFriendsList(@RequestBody SteamRequest steamRequest) {
         String steamUrl = steamRequest.getSteamUrl();
         return teamDetectorService.getFriendsList(steamUrl);
+    }
+
+    @GetMapping("/teamDetector")
+    public String teamDetector(@RequestParam String battlemetricsUrl, @RequestParam String steamUrl) {
+        return teamDetectorService.detectTeams(battlemetricsUrl, steamUrl);
     }
 }
