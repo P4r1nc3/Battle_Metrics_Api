@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RequestMapping("/players")
 public class PlayerController {
-    private PlayerService playerService;
+    private final PlayerService playerService;
 
     @GetMapping("/{playerId}")
     public PlayerResponse getPlayerById(@PathVariable String playerId) {
