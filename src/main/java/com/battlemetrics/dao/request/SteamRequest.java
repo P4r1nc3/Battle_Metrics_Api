@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SteamRequest {
     private String steamUrl;
+    private String serverId;
 }
