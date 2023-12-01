@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,9 +21,44 @@ import org.jsoup.select.Elements;
 public class TeamDetectorService {
     private final ServerService serverService;
 
-    // TODO implementation of below methods
-    public String detectTeams(String battlemetricsUrl, String steamUrl) {
-        return null;
+    public void detectTeams(String serverId, String steamUrl) {
+        List<Player> battlemetricsPlayers = getPlayersList(serverId);
+        List<Friend> initialFriendList = getFriendsList(steamUrl);
+
+        List<String> friends = new ArrayList<>();
+        List<String> leftToCheck = comparePlayers(battlemetricsPlayers, initialFriendList);
+
+        for(String id : leftToCheck) {
+            friends.add(id);
+        }
+
+        while (!leftToCheck.isEmpty()) {
+            List<String> newLeft = new ArrayList<>();
+            for (String id : leftToCheck) {
+                List<Friend> friendList = getFriendsList("https://steamcommunity.com/profiles/" + id + "/friends");
+                for (String friendC : comparePlayers(battlemetricsPlayers, friendList)) {
+                    if (!friends.contains(friendC) && !newLeft.contains(friendC)) {
+                        newLeft.add(friendC);
+                        friends.add(friendC);
+                    }
+                }
+            }
+            leftToCheck = newLeft;
+        }
+    }
+
+    private List<String> comparePlayers(List<Player> battlemetricsPlayers, List<Friend> friendList) {
+        List<String> players = new ArrayList<>();
+        for (Friend friend : friendList) {
+            String name = friend.getNick();
+            for (Player bmPlayer : battlemetricsPlayers) {
+                if (bmPlayer.getNick().equals(name)) {
+                    players.add(friend.getSteamId());
+                    break;
+                }
+            }
+        }
+        return players;
     }
 
 
@@ -51,7 +85,6 @@ public class TeamDetectorService {
             String content = request(url);
 
             if (content != null) {
-                System.out.println(parseFriends(content));
                 return parseFriends(content);
             } else {
                 throw new RuntimeException("Could not request friend list page");
