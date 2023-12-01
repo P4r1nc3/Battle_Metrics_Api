@@ -5,6 +5,8 @@ import com.battlemetrics.dao.response.bmapi.ServerResponse;
 import com.battlemetrics.model.Friend;
 import com.battlemetrics.model.Player;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,33 +20,63 @@ import org.jsoup.select.Elements;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class TeamDetectorService {
     private final ServerService serverService;
 
-    public void detectTeams(String serverId, String steamUrl) {
-        List<Player> battlemetricsPlayers = getPlayersList(serverId);
-        List<Friend> initialFriendList = getFriendsList(steamUrl);
-
+    public String detectTeams(String serverId, String steamUrl) {
+        GraphGenerator generator = new GraphGenerator();
         List<String> friends = new ArrayList<>();
-        List<String> leftToCheck = comparePlayers(battlemetricsPlayers, initialFriendList);
+        generator.addNode(steamUrl);
 
-        for(String id : leftToCheck) {
-            friends.add(id);
+        List<Player> battlemetricsPlayers = getPlayersList(serverId);
+        log.info("Players currently plying on server with id={}: {}", serverId, battlemetricsPlayers);
+
+        List<Friend> initialFriendList = getFriendsList(steamUrl);
+        log.info("Steam friends of player {}: {}", steamUrl, initialFriendList);
+
+        List<String> leftToCheck = comparePlayers(battlemetricsPlayers, initialFriendList);
+        log.info("Friends of player {}, which are currently playing on server with id={}: {}", steamUrl, serverId, leftToCheck);
+
+        for (String steamId : leftToCheck) {
+            friends.add(steamId);
+            generator.addNode(steamId);
+            generator.addEdge(0, generator.getNodeIndex(steamId));
         }
 
         while (!leftToCheck.isEmpty()) {
             List<String> newLeft = new ArrayList<>();
-            for (String id : leftToCheck) {
-                List<Friend> friendList = getFriendsList("https://steamcommunity.com/profiles/" + id + "/friends");
-                for (String friendC : comparePlayers(battlemetricsPlayers, friendList)) {
-                    if (!friends.contains(friendC) && !newLeft.contains(friendC)) {
-                        newLeft.add(friendC);
-                        friends.add(friendC);
+            for (String steamId : leftToCheck) {
+                String friendUrl = "https://steamcommunity.com/profiles/" + steamId;
+                log.info("Requested for friends of player {}", friendUrl);
+
+                List<Friend> friendList = getFriendsList(friendUrl + "/friends");
+                log.info("Friends of player {}: {}", friendUrl, friendList);
+
+                List<String> leftToCheckFriend = comparePlayers(battlemetricsPlayers, friendList);
+                log.info("Friends of player {}, which are currently playing on server with id={}: {}", friendUrl, serverId, leftToCheck);
+
+                for (String friendId : leftToCheckFriend) {
+                    if (!friends.contains(friendId) && !newLeft.contains(friendId)) {
+                        generator.addNode(friendId);
+                        generator.addEdge(generator.getNodeIndex(steamId), generator.getNodeIndex(friendId));
+                        newLeft.add(friendId);
+                        friends.add(friendId);
                     }
                 }
             }
             leftToCheck = newLeft;
         }
+
+        System.out.println("Final in graph we have:");
+        for (String steamId : friends) {
+            log.info("https://steamcommunity.com/profiles/" + steamId);
+        }
+
+        JSONObject graph = generator.getGraph();
+        log.info(graph.toString(2));
+
+        return graph.toString();
     }
 
     private List<String> comparePlayers(List<Player> battlemetricsPlayers, List<Friend> friendList) {
@@ -124,8 +156,11 @@ public class TeamDetectorService {
 
     private static String extractFriendLink(Element friendBlock) {
         Element linkElement = friendBlock.select("a.selectable_overlay").first();
-        String friendLink = linkElement.attr("href");
-        return friendLink;
+        if (linkElement != null) {
+            return linkElement.attr("href");
+        } else {
+            return "";
+        }
     }
 
     private String request(String url) {
