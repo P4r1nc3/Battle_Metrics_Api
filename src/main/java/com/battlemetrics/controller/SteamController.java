@@ -5,6 +5,7 @@ import com.battlemetrics.model.Friend;
 import com.battlemetrics.service.SteamService;
 import com.battlemetrics.service.TeamDetectorService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +33,6 @@ public class SteamController {
     public String teamDetector(@RequestBody SteamRequest steamRequest) {
         String steamUrl = steamRequest.getSteamUrl();
         String serverId = steamRequest.getServerId();
-        teamDetectorService.detectTeams(serverId, steamUrl);
-        return "ok";
+        return teamDetectorService.detectTeams(serverId, steamUrl);
     }
 }
