@@ -11,12 +11,12 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @AllArgsConstructor
 public class PlayerService {
-    public PlayerResponse getPlayerById(String playerId) {
+    public PlayerResponse getPlayerById(int playerId) {
         String apiUrl = Constants.API_URL + "/players/" + playerId;
         return new RestTemplate().getForObject(apiUrl, PlayerResponse.class);
     }
 
-    public PlayerSessionResponse getPlayerSessionsById(String playerId) {
+    public PlayerSessionResponse getPlayerSessionsById(int playerId) {
         String apiUrl = Constants.API_URL + "/players/" + playerId + "/relationships" +"/sessions";
         return new RestTemplate().getForObject(apiUrl, PlayerSessionResponse.class);
     }

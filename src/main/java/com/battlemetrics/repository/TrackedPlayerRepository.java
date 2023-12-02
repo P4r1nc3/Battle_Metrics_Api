@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface TrackedPlayerRepository extends JpaRepository<TrackedPlayer, String> {
     List<TrackedPlayer> findByUsers(User user);
-    TrackedPlayer findByUsersAndPlayerId(User user, String playerId);
+    TrackedPlayer findByUsersAndPlayerId(User user, int playerId);
 }
 

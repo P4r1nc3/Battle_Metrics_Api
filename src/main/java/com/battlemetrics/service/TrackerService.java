@@ -19,7 +19,7 @@ public class TrackerService {
     private final TrackedPlayerRepository trackedPlayerRepository;
 
     @Transactional
-    public void addPlayerToTracking(String playerId, User user) {
+    public void addPlayerToTracking(int playerId, User user) {
         PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
         boolean status = playerService.isPlayerOnline(playerSession).isOnline();
         String nick = playerService.getPlayerNick(playerSession);
@@ -35,7 +35,7 @@ public class TrackerService {
         trackedPlayerRepository.save(trackedPlayer);
     }
 
-    public void removePlayerFromTracking(String playerId, User user) {
+    public void removePlayerFromTracking(int playerId, User user) {
         TrackedPlayer trackedPlayer = trackedPlayerRepository.findByUsersAndPlayerId(user, playerId);
         if (trackedPlayer != null) {
             trackedPlayerRepository.delete(trackedPlayer);
@@ -48,7 +48,7 @@ public class TrackerService {
         return trackedPlayerRepository.findByUsers(user);
     }
 
-    public Optional<TrackedPlayer> getTrackedPlayer(String playerId) {
-        return trackedPlayerRepository.findById(playerId);
+    public Optional<TrackedPlayer> getTrackedPlayer(int playerId) {
+        return trackedPlayerRepository.findById(Integer.toString(playerId));
     }
 }
