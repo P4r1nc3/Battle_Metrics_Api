@@ -28,15 +28,13 @@ public class TrackerService {
         trackedPlayer.setPlayerId(playerId);
         trackedPlayer.setNick(nick);
         trackedPlayer.setOnline(status);
-        trackedPlayer.getUsers().add(user);
-
-        user.getTrackedPlayers().add(trackedPlayer);
+        trackedPlayer.setUser(user);
 
         trackedPlayerRepository.save(trackedPlayer);
     }
 
     public void removePlayerFromTracking(int playerId, User user) {
-        TrackedPlayer trackedPlayer = trackedPlayerRepository.findByUsersAndPlayerId(user, playerId);
+        TrackedPlayer trackedPlayer = trackedPlayerRepository.findByUserAndPlayerId(user, playerId);
         if (trackedPlayer != null) {
             trackedPlayerRepository.delete(trackedPlayer);
         } else {
@@ -45,7 +43,7 @@ public class TrackerService {
     }
 
     public List<TrackedPlayer> getTrackedPlayers(User user) {
-        return trackedPlayerRepository.findByUsers(user);
+        return trackedPlayerRepository.findByUser(user);
     }
 
     public Optional<TrackedPlayer> getTrackedPlayer(int playerId) {
