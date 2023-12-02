@@ -19,7 +19,7 @@ public class TrackerController {
     private final TrackerService trackerService;
 
     @PostMapping("/{playerId}")
-    public ResponseEntity<String> addPlayerToTracking(@PathVariable String playerId) {
+    public ResponseEntity<String> addPlayerToTracking(@PathVariable int playerId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         trackerService.addPlayerToTracking(playerId, user);
@@ -27,14 +27,14 @@ public class TrackerController {
     }
 
     @GetMapping("/{playerId}")
-    public ResponseEntity<TrackedPlayer> getTrackedPlayer(@PathVariable String playerId) {
+    public ResponseEntity<TrackedPlayer> getTrackedPlayer(@PathVariable int playerId) {
         TrackedPlayer trackedPlayer = trackerService.getTrackedPlayer(playerId)
                 .orElseThrow(() -> new EntityNotFoundException("Player not found with id: " + playerId));
         return ResponseEntity.ok(trackedPlayer);
     }
 
     @DeleteMapping("/{playerId}")
-    public ResponseEntity<String> removePlayerFromTracking(@PathVariable String playerId, Authentication authentication) {
+    public ResponseEntity<String> removePlayerFromTracking(@PathVariable int playerId, Authentication authentication) {
         User currentUser = (User) authentication.getPrincipal();
         trackerService.removePlayerFromTracking(playerId, currentUser);
         return ResponseEntity.ok("Player removed from tracking list.");

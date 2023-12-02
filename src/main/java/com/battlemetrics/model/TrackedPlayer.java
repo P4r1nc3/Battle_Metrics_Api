@@ -18,7 +18,7 @@ import java.util.Set;
 public class TrackedPlayer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String playerId;
+    private int playerId;
     private String nick;
     private boolean online;
     private boolean notifications = true;
