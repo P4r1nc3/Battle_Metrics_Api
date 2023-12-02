@@ -17,17 +17,17 @@ public class PlayerController {
     private final PlayerService playerService;
 
     @GetMapping("/{playerId}")
-    public PlayerResponse getPlayerById(@PathVariable String playerId) {
+    public PlayerResponse getPlayerById(@PathVariable int playerId) {
         return playerService.getPlayerById(playerId);
     }
 
     @GetMapping("/{playerId}/sessions")
-    public PlayerSessionResponse getPlayerSessionsById(@PathVariable String playerId) {
+    public PlayerSessionResponse getPlayerSessionsById(@PathVariable int playerId) {
         return playerService.getPlayerSessionsById(playerId);
     }
 
     @GetMapping("/{playerId}/isOnline")
-    public PlayerStatusResponse isPlayerOnline(@PathVariable String playerId) {
+    public PlayerStatusResponse isPlayerOnline(@PathVariable int playerId) {
         PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
         return playerService.isPlayerOnline(playerSession);
     }

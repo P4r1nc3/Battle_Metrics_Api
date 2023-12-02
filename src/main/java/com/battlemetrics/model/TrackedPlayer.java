@@ -17,12 +17,15 @@ import java.util.Set;
 @Table(name = "tracked_players")
 public class TrackedPlayer {
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String playerId;
+    private int entityId;
+    private int playerId;
     private String nick;
     private boolean online;
     private boolean notifications = true;
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "trackedPlayers", cascade = { CascadeType.ALL })
-    private Set<User> users = new HashSet<>();
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

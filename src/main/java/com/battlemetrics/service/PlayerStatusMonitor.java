@@ -32,7 +32,7 @@ public class PlayerStatusMonitor {
             List<TrackedPlayer> trackedPlayers = user.getTrackedPlayers().stream().toList();
 
             for (TrackedPlayer trackedPlayer : trackedPlayers) {
-                String playerId = trackedPlayer.getPlayerId();
+                int playerId = trackedPlayer.getPlayerId();
                 PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
 
                 boolean currentStatus = playerService.isPlayerOnline(playerSession).isOnline();
