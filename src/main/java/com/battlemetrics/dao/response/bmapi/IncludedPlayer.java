@@ -1,5 +1,6 @@
 package com.battlemetrics.dao.response.bmapi;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
 
 import java.util.List;
@@ -24,7 +25,13 @@ public class IncludedPlayer {
 
     @Data
     public static class PlayerRelationships {
-        private ServerData data;
+        private ServerData server;
+    }
+
+    @Data
+    public static class ServerData {
+        private String type;
+        private String id;
     }
 
     @Data
@@ -35,13 +42,7 @@ public class IncludedPlayer {
     @Data
     public static class Metadata {
         private String key;
-        private boolean value;
+        private JsonNode value;
         private boolean isPrivate;
-    }
-
-    @Data
-    public static class ServerData {
-        private String type;
-        private String id;
     }
 }
