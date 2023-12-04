@@ -1,7 +1,7 @@
 package com.battlemetrics.controller;
 
 import com.battlemetrics.dao.request.SteamRequest;
-import com.battlemetrics.model.Friend;
+import com.battlemetrics.model.Player;
 import com.battlemetrics.service.SteamService;
 import com.battlemetrics.service.TeamDetectorService;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ public class SteamController {
     }
 
     @PostMapping("/friends")
-    public List<Friend> getFriendsList(@RequestBody SteamRequest steamRequest) {
+    public List<Player> getFriendsList(@RequestBody SteamRequest steamRequest) {
         String steamUrl = steamRequest.getSteamUrl();
         return teamDetectorService.getFriendsList(steamUrl);
     }
