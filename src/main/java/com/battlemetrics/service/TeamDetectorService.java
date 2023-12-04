@@ -2,7 +2,6 @@ package com.battlemetrics.service;
 
 import com.battlemetrics.dao.response.bmapi.IncludedPlayer;
 import com.battlemetrics.dao.response.bmapi.ServerResponse;
-import com.battlemetrics.model.Friend;
 import com.battlemetrics.model.Player;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,52 +24,54 @@ public class TeamDetectorService {
     private final ServerService serverService;
 
     public String detectTeams(String serverId, String steamUrl) {
+        List<Player> result = new ArrayList<>();
         GraphGenerator generator = new GraphGenerator();
-        List<String> friends = new ArrayList<>();
-        generator.addNode(steamUrl);
+
+        Player root = Player.builder()
+                .nick(getNick(steamUrl))
+                .steamUrl(steamUrl)
+                .build();
+
+        result.add(root);
+        generator.addNode(getNick(steamUrl));
 
         List<Player> battlemetricsPlayers = getPlayersList(serverId);
         log.info("Players currently plying on server with id={}: {}", serverId, battlemetricsPlayers);
 
-        List<Friend> initialFriendList = getFriendsList(steamUrl);
+        List<Player> initialFriendList = getFriendsList(steamUrl);
         log.info("Steam friends of player {}: {}", steamUrl, initialFriendList);
 
-        List<String> leftToCheck = comparePlayers(battlemetricsPlayers, initialFriendList);
+        List<Player> leftToCheck = comparePlayers(battlemetricsPlayers, initialFriendList);
         log.info("Friends of player {}, which are currently playing on server with id={}: {}", steamUrl, serverId, leftToCheck);
 
-        for (String steamId : leftToCheck) {
-            friends.add(steamId);
-            generator.addNode(steamId);
-            generator.addEdge(0, generator.getNodeIndex(steamId));
+        for (Player player : leftToCheck) {
+            result.add(player);
+            generator.addNode(player.getNick());
+            generator.addEdge(generator.getNodeIndex(root.getNick()), generator.getNodeIndex(player.getNick()));
         }
 
         while (!leftToCheck.isEmpty()) {
-            List<String> newLeft = new ArrayList<>();
-            for (String steamId : leftToCheck) {
-                String friendUrl = "https://steamcommunity.com/profiles/" + steamId;
+            List<Player> newLeft = new ArrayList<>();
+            for (Player player : leftToCheck) {
+                String friendUrl = player.getSteamUrl() + "/friends";
                 log.info("Requested for friends of player {}", friendUrl);
 
-                List<Friend> friendList = getFriendsList(friendUrl + "/friends");
+                List<Player> friendList = getFriendsList(friendUrl);
                 log.info("Friends of player {}: {}", friendUrl, friendList);
 
-                List<String> leftToCheckFriend = comparePlayers(battlemetricsPlayers, friendList);
+                List<Player> leftToCheckFriend = comparePlayers(battlemetricsPlayers, friendList);
                 log.info("Friends of player {}, which are currently playing on server with id={}: {}", friendUrl, serverId, leftToCheck);
 
-                for (String friendId : leftToCheckFriend) {
-                    if (!friends.contains(friendId) && !newLeft.contains(friendId)) {
-                        generator.addNode(friendId);
-                        generator.addEdge(generator.getNodeIndex(steamId), generator.getNodeIndex(friendId));
-                        newLeft.add(friendId);
-                        friends.add(friendId);
+                for (Player friend : leftToCheckFriend) {
+                    if (!result.contains(friend) && !newLeft.contains(friend)) {
+                        result.add(friend);
+                        newLeft.add(friend);
+                        generator.addNode(friend.getNick());
                     }
+                    generator.addEdge(generator.getNodeIndex(player.getNick()), generator.getNodeIndex(friend.getNick()));
                 }
             }
             leftToCheck = newLeft;
-        }
-
-        System.out.println("Final in graph we have:");
-        for (String steamId : friends) {
-            log.info("https://steamcommunity.com/profiles/" + steamId);
         }
 
         JSONObject graph = generator.getGraph();
@@ -79,13 +80,20 @@ public class TeamDetectorService {
         return graph.toString();
     }
 
-    private List<String> comparePlayers(List<Player> battlemetricsPlayers, List<Friend> friendList) {
-        List<String> players = new ArrayList<>();
-        for (Friend friend : friendList) {
-            String name = friend.getNick();
-            for (Player bmPlayer : battlemetricsPlayers) {
+    private List<Player> comparePlayers(List<Player> battleMetricsPlayers, List<Player> steamFriendsList) {
+        List<Player> players = new ArrayList<>();
+        for (Player steamFriend : steamFriendsList) {
+            String name = steamFriend.getNick();
+            for (Player bmPlayer : battleMetricsPlayers) {
                 if (bmPlayer.getNick().equals(name)) {
-                    players.add(friend.getSteamId());
+                    Player player = Player.builder()
+                            .nick(name)
+                            .steamId(steamFriend.getSteamId())
+                            .steamUrl(steamFriend.getSteamUrl())
+                            .battleMetricsId(bmPlayer.getBattleMetricsId())
+                            .battleMetricsUrl(bmPlayer.getBattleMetricsUrl())
+                            .build();
+                    players.add(player);
                     break;
                 }
             }
@@ -104,14 +112,14 @@ public class TeamDetectorService {
             String id = includedPlayer.getAttributes().getId();
             String url = "https://www.battlemetrics.com/players/" + id;
 
-            Player player = new Player(nick, id, url);
+            Player player = new Player(nick, "", "", id, url);
             playersList.add(player);
         }
 
         return playersList;
     }
 
-    public List<Friend> getFriendsList(String steamUrl) {
+    public List<Player> getFriendsList(String steamUrl) {
         try {
             String url = steamUrl.contains("friends") ? steamUrl : steamUrl + "friends";
             String content = request(url);
@@ -126,8 +134,8 @@ public class TeamDetectorService {
         }
     }
 
-    private static List<Friend> parseFriends(String content) {
-        List<Friend> friends = new ArrayList<>();
+    private static List<Player> parseFriends(String content) {
+        List<Player> friends = new ArrayList<>();
 
         Document doc = Jsoup.parse(content);
         Elements friendBlocks = doc.select(".friend_block_v2[data-steamid]");
@@ -135,14 +143,15 @@ public class TeamDetectorService {
         for (Element friendBlock : friendBlocks) {
             String friendName = extractFriendName(friendBlock);
             String friendSteamId = extractFriendSteamId(friendBlock);
-            String friendLink = extractFriendLink(friendBlock);
+            String friendSteamUrl = extractFriendLink(friendBlock);
 
-            Friend friend = new Friend(friendName, friendSteamId, friendLink);
+            Player friend = new Player(friendName, friendSteamId, friendSteamUrl, "", "");
             friends.add(friend);
         }
 
         return friends;
     }
+
 
     private static String extractFriendSteamId(Element friendBlock) {
         return friendBlock.attr("data-steamid");
@@ -160,6 +169,27 @@ public class TeamDetectorService {
             return linkElement.attr("href");
         } else {
             return "";
+        }
+    }
+
+    private String getNick(String url) {
+        try {
+            String content = request(url);
+
+            if (content != null) {
+                Document doc = Jsoup.parse(content);
+                Element profileNameElement = doc.select(".actual_persona_name").first();
+
+                if (profileNameElement != null) {
+                    return profileNameElement.text().trim();
+                } else {
+                    throw new RuntimeException("Nickname not found on the Steam profile page");
+                }
+            } else {
+                throw new RuntimeException("Could not get nick");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Could not get nick.", e);
         }
     }
 
