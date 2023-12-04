@@ -34,12 +34,29 @@ public class GraphGenerator {
     }
 
     public void addEdge(int from, int to) {
-        JSONObject edge = new JSONObject();
-        edge.put("from", from);
-        edge.put("to", to);
+        if (!hasEdge(from, to)) {
+            JSONObject edge = new JSONObject();
+            edge.put("from", from);
+            edge.put("to", to);
 
+            JSONArray edgesArray = graph.getJSONArray("edges");
+            edgesArray.put(edge);
+        }
+    }
+
+    public boolean hasEdge(int from, int to) {
         JSONArray edgesArray = graph.getJSONArray("edges");
-        edgesArray.put(edge);
+        for (int i = 0; i < edgesArray.length(); i++) {
+            JSONObject edge = edgesArray.getJSONObject(i);
+            int edgeFrom = edge.getInt("from");
+            int edgeTo = edge.getInt("to");
+
+            if ((edgeFrom == from && edgeTo == to) || (edgeFrom == to && edgeTo == from)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public JSONObject getGraph() {
