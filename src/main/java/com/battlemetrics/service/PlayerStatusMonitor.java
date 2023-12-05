@@ -5,7 +5,6 @@ import com.battlemetrics.dao.response.bmapi.PlayerSessionResponse;
 import com.battlemetrics.model.User;
 import com.battlemetrics.repository.TrackedPlayerRepository;
 import com.battlemetrics.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
