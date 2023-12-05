@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableScheduling
 @SpringBootApplication
-public class BattleMetricsApiApplication {
+public class RustApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BattleMetricsApiApplication.class, args);
+		SpringApplication.run(RustApiApplication.class, args);
 	}
 
 }

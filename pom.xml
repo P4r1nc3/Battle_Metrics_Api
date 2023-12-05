@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.battlemetrics</groupId>
-	<artifactId>battle-metrics-api</artifactId>
+	<artifactId>rust-service-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Battle Metrics API</name>
-	<description>Web service using Battle Metrics API</description>
+	<name>RUST Service</name>
+	<description>Complex RUST service using Battle Metrics API</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
