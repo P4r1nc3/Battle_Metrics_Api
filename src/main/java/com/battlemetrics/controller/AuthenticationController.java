@@ -3,7 +3,7 @@ package com.battlemetrics.controller;
 import com.battlemetrics.dao.request.SignUpRequest;
 import com.battlemetrics.dao.request.SignInRequest;
 import com.battlemetrics.dao.response.JwtAuthenticationResponse;
-import com.battlemetrics.service.AuthenticationService;
+import com.battlemetrics.authorization.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

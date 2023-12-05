@@ -1,4 +1,4 @@
-package com.battlemetrics.service.impl;
+package com.battlemetrics.authorization.impl;
 
 import com.battlemetrics.model.Role;
 import com.battlemetrics.model.User;
@@ -6,8 +6,8 @@ import com.battlemetrics.dao.request.SignUpRequest;
 import com.battlemetrics.dao.request.SignInRequest;
 import com.battlemetrics.dao.response.JwtAuthenticationResponse;
 import com.battlemetrics.repository.UserRepository;
-import com.battlemetrics.service.AuthenticationService;
-import com.battlemetrics.service.JwtService;
+import com.battlemetrics.authorization.AuthenticationService;
+import com.battlemetrics.authorization.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;

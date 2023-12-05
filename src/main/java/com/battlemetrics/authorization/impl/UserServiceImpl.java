@@ -1,7 +1,7 @@
-package com.battlemetrics.service.impl;
+package com.battlemetrics.authorization.impl;
 
 import com.battlemetrics.repository.UserRepository;
-import com.battlemetrics.service.UserService;
+import com.battlemetrics.authorization.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -1,4 +1,4 @@
-package com.battlemetrics.service;
+package com.battlemetrics.authorization;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 

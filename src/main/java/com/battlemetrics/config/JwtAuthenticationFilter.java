@@ -2,8 +2,8 @@ package com.battlemetrics.config;
 
 import java.io.IOException;
 
-import com.battlemetrics.service.JwtService;
-import com.battlemetrics.service.UserService;
+import com.battlemetrics.authorization.JwtService;
+import com.battlemetrics.authorization.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
