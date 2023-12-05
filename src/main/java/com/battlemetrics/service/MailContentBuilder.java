@@ -1,7 +1,7 @@
 package com.battlemetrics.service;
 
-import com.battlemetrics.dao.response.PlayerSessionResponse;
-import com.battlemetrics.dao.response.ServerResponse;
+import com.battlemetrics.dao.response.bmapi.PlayerSessionResponse;
+import com.battlemetrics.dao.response.bmapi.ServerResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class MailContentBuilder {
         String serverId = playerSession.getData().get(0).getRelationships().getServer().getData().getId();
         Instant startTime = playerSession.getData().get(0).getAttributes().getStart();
 
-        ServerResponse serverResponse = serverService.getServerById(serverId);
+        ServerResponse serverResponse = serverService.getServerById(serverId, null);
 
         String serverName = serverResponse.getData().getAttributes().getName();
         String ipAddress = serverResponse.getData().getAttributes().getIp();

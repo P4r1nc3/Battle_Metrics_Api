@@ -1,14 +1,17 @@
-package com.battlemetrics.dao.response;
+package com.battlemetrics.dao.response.bmapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServerResponse {
     private ServerData data;
+    private List<IncludedPlayer> included;
 
     @Data
     public static class ServerData {

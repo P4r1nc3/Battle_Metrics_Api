@@ -1,4 +1,4 @@
-package com.battlemetrics.dao.response;
+package com.battlemetrics.dao.response.steamapi;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

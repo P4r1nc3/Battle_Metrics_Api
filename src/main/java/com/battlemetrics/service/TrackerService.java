@@ -1,7 +1,7 @@
 package com.battlemetrics.service;
 
 import com.battlemetrics.model.TrackedPlayer;
-import com.battlemetrics.dao.response.PlayerSessionResponse;
+import com.battlemetrics.dao.response.bmapi.PlayerSessionResponse;
 import com.battlemetrics.model.User;
 import com.battlemetrics.repository.TrackedPlayerRepository;
 import jakarta.persistence.EntityNotFoundException;

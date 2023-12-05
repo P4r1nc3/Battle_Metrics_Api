@@ -1,9 +1,9 @@
 package com.battlemetrics.service;
 
 import com.battlemetrics.Constants;
-import com.battlemetrics.dao.response.PlayerResponse;
+import com.battlemetrics.dao.response.bmapi.PlayerResponse;
 import com.battlemetrics.dao.response.PlayerStatusResponse;
-import com.battlemetrics.dao.response.PlayerSessionResponse;
+import com.battlemetrics.dao.response.bmapi.PlayerSessionResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
