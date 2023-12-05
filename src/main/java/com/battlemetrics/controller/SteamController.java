@@ -17,7 +17,7 @@ public class SteamController {
     private final SteamService steamService;
     private final TeamDetectorService teamDetectorService;
 
-    @PostMapping
+    @PostMapping("/id")
     public String getSteamId(@RequestBody SteamRequest steamRequest) {
         String steamUrl = steamRequest.getSteamUrl();
         return steamService.getSteamId(steamUrl);
