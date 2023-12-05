@@ -34,12 +34,9 @@ public class TrackerService {
     }
 
     public void removePlayerFromTracking(int playerId, User user) {
-        TrackedPlayer trackedPlayer = trackedPlayerRepository.findByUserAndPlayerId(user, playerId);
-        if (trackedPlayer != null) {
-            trackedPlayerRepository.delete(trackedPlayer);
-        } else {
-            throw new EntityNotFoundException("Tracked player not found with id: " + playerId);
-        }
+        TrackedPlayer trackedPlayer = trackedPlayerRepository.findByUserAndPlayerId(user, playerId)
+                .orElseThrow(() -> new EntityNotFoundException("Tracked player not found with id: " + playerId));
+        trackedPlayerRepository.delete(trackedPlayer);
     }
 
     public List<TrackedPlayer> getTrackedPlayers(User user) {
