@@ -4,6 +4,7 @@ import com.battlemetrics.Constants;
 import com.battlemetrics.dao.response.steamapi.SteamResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 @NoArgsConstructor
@@ -55,7 +57,7 @@ public class SteamService {
         if (parts.length == 2) {
             String nick = parts[1];
             String steamApiUrl = Constants.STEAM_API_URL + "/ISteamUser" + "/ResolveVanityURL" + "/v0001" + "/?key=" + steamKey + "&vanityurl=" + nick;
-            System.out.println(steamApiUrl);
+            log.info("Calling {} ",steamApiUrl);
             SteamResponse steamApiResponse = new RestTemplate().getForObject(steamApiUrl, SteamResponse.class);
             if (steamApiResponse != null && steamApiResponse.getResponse() != null
                     && steamApiResponse.getResponse().getSuccess() == 1) {
