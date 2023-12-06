@@ -10,7 +10,6 @@ import java.util.Map;
 @Service
 public class GraphGenerator {
     private JSONObject graph;
-
     private Map<String, Integer> nodeIndexMap = new HashMap<>();
     private int counter = 0;
 
