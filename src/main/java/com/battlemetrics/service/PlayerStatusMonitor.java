@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,26 +27,25 @@ public class PlayerStatusMonitor {
     @Transactional
     @Scheduled(fixedDelay = 10000)
     public void checkTrackedPlayersOnlineStatus() {
-        Optional<User> userOptional = userRepository.findByEmail("draber21@gmail.com");
+        User user = userRepository.findByEmail("draber21@gmail.com")
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        userOptional.ifPresent(user -> {
-            List<TrackedPlayer> trackedPlayers = user.getTrackedPlayers().stream().toList();
+        List<TrackedPlayer> trackedPlayers = user.getTrackedPlayers().stream().toList();
 
-            for (TrackedPlayer trackedPlayer : trackedPlayers) {
-                int playerId = trackedPlayer.getPlayerId();
-                PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
+        for (TrackedPlayer trackedPlayer : trackedPlayers) {
+            int playerId = trackedPlayer.getPlayerId();
+            PlayerSessionResponse playerSession = playerService.getPlayerSessionsById(playerId);
 
-                boolean currentStatus = playerService.isPlayerOnline(playerSession).isOnline();
-                boolean lastStatus = trackedPlayer.isOnline();
+            boolean currentStatus = playerService.isPlayerOnline(playerSession).isOnline();
+            boolean lastStatus = trackedPlayer.isOnline();
 
-                if (currentStatus != lastStatus) {
-                    if(trackedPlayer.isNotifications()){
-                        mailService.sendNotification(playerSession);
-                    }
-                    trackedPlayer.setOnline(currentStatus);
-                    trackerRepository.save(trackedPlayer);
+            if (currentStatus != lastStatus) {
+                if(trackedPlayer.isNotifications()){
+                    mailService.sendNotification(playerSession);
                 }
+                trackedPlayer.setOnline(currentStatus);
+                trackerRepository.save(trackedPlayer);
             }
-        });
+        }
     }
 }

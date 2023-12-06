@@ -1,4 +1,4 @@
-package com.battlemetrics.service.impl;
+package com.battlemetrics.authorization.impl;
 
 import java.security.Key;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.battlemetrics.service.JwtService;
+import com.battlemetrics.authorization.JwtService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;

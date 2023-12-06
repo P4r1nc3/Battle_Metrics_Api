@@ -40,7 +40,7 @@ public class TrackerController {
         return ResponseEntity.ok("Player removed from tracking list.");
     }
 
-    @GetMapping("/trackedPlayers")
+    @GetMapping
     public ResponseEntity<List<TrackedPlayer>> getTrackedPlayersForCurrentUser(Authentication authentication) {
         User currentUser = (User) authentication.getPrincipal();
         List<TrackedPlayer> trackedPlayers = trackerService.getTrackedPlayers(currentUser);

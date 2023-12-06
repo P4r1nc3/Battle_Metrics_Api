@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @AllArgsConstructor
 public class ServerService {
     public ServerResponse getServerById(String serverId, String include) {
-        String apiUrl = Constants.API_URL + "/servers/" + serverId;
+        String apiUrl = Constants.BM_API_URL + "/servers/" + serverId;
 
         if (include != null && !include.isEmpty()) {
             apiUrl += "?include=" + include;

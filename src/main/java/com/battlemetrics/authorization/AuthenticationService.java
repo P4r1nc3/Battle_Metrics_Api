@@ -1,4 +1,4 @@
-package com.battlemetrics.service;
+package com.battlemetrics.authorization;
 
 import com.battlemetrics.dao.request.SignUpRequest;
 import com.battlemetrics.dao.request.SignInRequest;

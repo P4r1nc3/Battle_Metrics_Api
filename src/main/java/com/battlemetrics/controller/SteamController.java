@@ -5,7 +5,6 @@ import com.battlemetrics.model.Player;
 import com.battlemetrics.service.SteamService;
 import com.battlemetrics.service.TeamDetectorService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +16,7 @@ public class SteamController {
     private final SteamService steamService;
     private final TeamDetectorService teamDetectorService;
 
-    @PostMapping
+    @PostMapping("/id")
     public String getSteamId(@RequestBody SteamRequest steamRequest) {
         String steamUrl = steamRequest.getSteamUrl();
         return steamService.getSteamId(steamUrl);
